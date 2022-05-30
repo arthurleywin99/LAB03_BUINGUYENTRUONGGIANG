@@ -12,6 +12,7 @@ namespace LAB03_BUINGUYENTRUONGGIANG.ViewModels
         [Required]
         public string Place { get; set; }
         [Required]
+        [FutureDate]
         public string Date { get; set; }
         [Required]
         public string Time { get; set; }

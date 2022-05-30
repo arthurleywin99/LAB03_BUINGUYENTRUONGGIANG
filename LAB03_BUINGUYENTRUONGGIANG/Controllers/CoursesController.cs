@@ -32,6 +32,7 @@ namespace LAB03_BUINGUYENTRUONGGIANG.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CourseViewModel viewModel)
         {
             using (var context = new ApplicationDbContext())
