@@ -21,7 +21,7 @@ namespace LAB03_BUINGUYENTRUONGGIANG.ViewModels
 
         public DateTime GetDateTime()
         {
-            return DateTime.Parse(string.Format($"{0} {1}", Date, Time));
+            return DateTime.Parse(String.Format("{0} {1}", Date, Time));
         }
     }
 }
