@@ -18,6 +18,6 @@ namespace LAB03_BUINGUYENTRUONGGIANG.Models
         public DateTime DateTime { get; set; }
         public Category Category { get; set; }
         [Required]
-        public byte CategoryId { get; set; }
+        public string CategoryId { get; set; }
     }
 }

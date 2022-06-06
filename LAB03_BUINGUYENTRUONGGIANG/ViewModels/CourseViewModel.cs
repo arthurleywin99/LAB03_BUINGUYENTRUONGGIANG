@@ -17,7 +17,7 @@ namespace LAB03_BUINGUYENTRUONGGIANG.ViewModels
         [Required]
         public string Time { get; set; }
         [Required]
-        public byte Category { get; set; }
+        public string Category { get; set; }
         public IEnumerable<Category> Categories { get; set; }
 
         public DateTime GetDateTime()
