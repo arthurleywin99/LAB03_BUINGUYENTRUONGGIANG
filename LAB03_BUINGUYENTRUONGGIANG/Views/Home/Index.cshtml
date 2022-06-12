@@ -4,11 +4,26 @@
 }
 
 <div class="row">
-    <ul>
+    <ul class="course">
         @foreach (var item in Model)
             {
                 <li>
-                    @item.DateTime - @item.Lecturer.Name
+                    <div class="date">
+                        <div class="month">
+                            @item.DateTime.ToString("MM")
+                        </div>
+                        <div class="day">
+                            @item.DateTime.ToString("dd")
+                        </div>
+                    </div>
+                    <div class="details">
+                        <span class="lecturer">
+                            @item.Lecturer.Name
+                        </span>
+                        <span class="category">
+                            @item.Category.Name
+                        </span>
+                    </div>
                 </li>
             }
     </ul>
