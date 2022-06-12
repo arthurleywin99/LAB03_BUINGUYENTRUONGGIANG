@@ -23,8 +23,29 @@
                         <span class="category">
                             @item.Category.Name
                         </span>
+                        <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
                     </div>
                 </li>
             }
     </ul>
+    @section scripts 
+    {
+        <script>
+            $(document).ready(function () {
+                $(".js-toogle-attendance").click(function (e) {
+                    var button = $(e.target);
+                    $.post('/api/attendances', { courseId: button.attr("data-course-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-default")
+                                .addClass("btn-info")
+                                .text("Going");
+                        })
+                        .fail(function () {
+                            alert("Something failed!");
+                        })
+                })
+            })
+        </script>
+    }
 </div>
