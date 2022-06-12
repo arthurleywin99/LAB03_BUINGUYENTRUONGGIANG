@@ -8,9 +8,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using LAB03_BUINGUYENTRUONGGIANG.Models;
+using Lab03_BuiNguyenTruongGiang.Models;
 
-namespace LAB03_BUINGUYENTRUONGGIANG.Controllers
+namespace Lab03_BuiNguyenTruongGiang.Controllers
 {
     [Authorize]
     public class AccountController : Controller

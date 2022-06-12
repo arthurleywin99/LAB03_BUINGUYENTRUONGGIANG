@@ -3,23 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
-using LAB03_BUINGUYENTRUONGGIANG.Models;
 
-namespace LAB03_BUINGUYENTRUONGGIANG.Controllers
+namespace Lab03_BuiNguyenTruongGiang.Controllers
 {
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-            using (var context = new ApplicationDbContext())
-            {
-                List<Course> upcommingCourses = context.Courses
-                    .Include(prop => prop.Lecturer)
-                    .Include(prop => prop.Category)
-                    .Where(prop => prop.DateTime > DateTime.Now).ToList();
-                return View(upcommingCourses);
-            }
+            return View();
         }
 
         public ActionResult About()

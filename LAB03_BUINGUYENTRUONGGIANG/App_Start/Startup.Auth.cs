@@ -5,9 +5,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using LAB03_BUINGUYENTRUONGGIANG.Models;
+using Lab03_BuiNguyenTruongGiang.Models;
 
-namespace LAB03_BUINGUYENTRUONGGIANG
+namespace Lab03_BuiNguyenTruongGiang
 {
     public partial class Startup
     {
