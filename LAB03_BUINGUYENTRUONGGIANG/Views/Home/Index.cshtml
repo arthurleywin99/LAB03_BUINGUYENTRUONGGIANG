@@ -1,51 +1,88 @@
-﻿@model IEnumerable<Lab03_BuiNguyenTruongGiang.Models.Course>
+﻿@using Microsoft.AspNet.Identity
+@model Lab03_BuiNguyenTruongGiang.ViewModels.CoursesViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
 <div class="row">
     <ul class="course">
-        @foreach (var item in Model)
-            {
-                <li>
-                    <div class="date">
-                        <div class="month">
-                            @item.DateTime.ToString("MM")
-                        </div>
-                        <div class="day">
-                            @item.DateTime.ToString("dd")
-                        </div>
+        @foreach (var item in Model.UpcommingCourses)
+        {
+            <li>
+                <div class="date">
+                    <div class="month">
+                        @item.DateTime.ToString("MM")
                     </div>
-                    <div class="details">
-                        <span class="lecturer">
-                            @item.Lecturer.Name
-                        </span>
-                        <span class="category">
-                            @item.Category.Name
-                        </span>
-                        <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
+                    <div class="day">
+                        @item.DateTime.ToString("dd")
                     </div>
-                </li>
-            }
+                </div>
+                <div class="details">
+                    <span class="lecturer">
+                        @item.Lecturer.Name
+                        @if (Model.ShowAction)
+                        {
+                            if (!Model.FollowingList.Any(p => p.FolloweeId == item.LecturerId))
+                            {
+                                <button class="btn btn-default btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Follow?</button>
+                            }
+                            else
+                            {
+                                <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Following</button>
+                            }
+                        }
+                    </span>
+                    <br />
+                    <span class="category">
+                        @item.Category.Name
+                    </span>
+                    @if (Model.ShowAction)
+                    {
+                        if (!Model.AttendanceList.Any(p => p.CourseId == item.Id))
+                        {
+                            <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
+                        }
+                        else
+                        {
+                            <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Going</button>
+                        }
+                    }
+                </div>
+            </li>
+        }
     </ul>
-    @section scripts 
-    {
-        <script>
-            $(document).ready(function () {
-                $(".js-toogle-attendance").click(function (e) {
-                    var button = $(e.target);
-                    $.post('/api/attendances', { courseId: button.attr("data-course-id") })
-                        .done(function () {
-                            button
-                                .removeClass("btn-default")
-                                .addClass("btn-info")
-                                .text("Going");
-                        })
-                        .fail(function () {
-                            alert("Something failed!");
-                        })
-                })
-            })
-        </script>
-    }
 </div>
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $(".js-toogle-attendance").click(function (e) {
+                var button = $(e.target);
+                $.post('/api/attendances', { courseId: button.attr("data-course-id") })
+                    .done(function () {
+                        button
+                            .removeClass("btn-default")
+                            .addClass("btn-info")
+                            .text("Going");
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    })
+            });
+            $(".js-toogle-follow").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/followings", { followeeId: button.attr("data-user-id") })
+                    .done(function () {
+                        button
+                            .removeClass("btn-default")
+                            .addClass("btn-info")
+                            .text("Following");
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    })
+            });
+        })
+    </script>
+}

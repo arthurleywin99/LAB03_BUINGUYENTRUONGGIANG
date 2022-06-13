@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using Lab03_BuiNguyenTruongGiang.Models;
+using Lab03_BuiNguyenTruongGiang.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace Lab03_BuiNguyenTruongGiang.Controllers
 {
@@ -18,7 +20,19 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                     .Include(p => p.Lecturer)
                     .Include(p => p.Category)
                     .Where(p => p.DateTime > DateTime.Now).ToList();
-                return View(upcommingCourses);
+                var userId = User.Identity.GetUserId();
+                List<Following> followings = context.Followings.Where(p => p.FollowerId == userId).ToList();
+
+                List<Attendance> attendances = context.Attendances.Where(p => p.AttendeeId == userId).ToList();
+
+                CoursesViewModel viewModel = new CoursesViewModel
+                {
+                    UpcommingCourses = upcommingCourses,
+                    ShowAction = User.Identity.IsAuthenticated,
+                    FollowingList = followings,
+                    AttendanceList = attendances
+                };
+                return View(viewModel);
             }
         }
 

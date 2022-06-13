@@ -12,6 +12,8 @@ namespace Lab03_BuiNguyenTruongGiang.Models
         public DbSet<Course> Courses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Following> Followings { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -28,6 +30,17 @@ namespace Lab03_BuiNguyenTruongGiang.Models
                 .HasRequired(p => p.Course)
                 .WithMany()
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(p => p.Followers)
+                .WithRequired(q => q.Followee)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(p => p.Followers)
+                .WithRequired(q => q.Follower)
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
     }
