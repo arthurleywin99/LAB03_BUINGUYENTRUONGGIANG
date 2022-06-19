@@ -10,10 +10,12 @@ using Microsoft.AspNet.Identity;
 
 namespace Lab03_BuiNguyenTruongGiang.Controllers
 {
+    [RoutePrefix("api/attendances")]
     public class AttendancesController : ApiController
     {
         [HttpPost]
-        public IHttpActionResult Attend(AttendanceDto attendanceDto)
+        [Route("goingattend")]
+        public IHttpActionResult GoingAttend(AttendanceDto attendanceDto)
         {
             using (var context = new ApplicationDbContext())
             {
@@ -30,6 +32,27 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                         AttendeeId = userId
                     };
                     context.Attendances.Add(attendance);
+                    context.SaveChanges();
+                    return Ok();
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("goattend")]
+        public IHttpActionResult GoAttend(AttendanceDto attendanceDto)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userId = User.Identity.GetUserId();
+                Attendance attendance = context.Attendances.FirstOrDefault(p => p.CourseId == attendanceDto.CourseId && p.AttendeeId == userId);
+                if (attendance == null)
+                {
+                    return BadRequest("The Attendance doestnot exist!");
+                }
+                else
+                {
+                    context.Attendances.Remove(attendance);
                     context.SaveChanges();
                     return Ok();
                 }

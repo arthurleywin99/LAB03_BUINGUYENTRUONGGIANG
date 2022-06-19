@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Lab03_BuiNguyenTruongGiang.Models.Following>
+@{
+    ViewBag.Title = "Lecturing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lecturing</h2>
+
+<div class="row">
+    <div style="font-size: 28px;"><b>Fullname</b></div>
+</div>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div style="font-size: 24px;">@item.Followee.Name</div>
+    }
+</div>

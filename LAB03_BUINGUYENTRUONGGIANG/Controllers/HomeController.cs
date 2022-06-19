@@ -16,11 +16,13 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
         {
             using (var context = new ApplicationDbContext())
             {
+                var userId = User.Identity.GetUserId();
+
                 List<Course> upcommingCourses = context.Courses
                     .Include(p => p.Lecturer)
                     .Include(p => p.Category)
-                    .Where(p => p.DateTime > DateTime.Now).ToList();
-                var userId = User.Identity.GetUserId();
+                    .Where(p => p.DateTime > DateTime.Now && p.IsCanceled == false).ToList();
+                
                 List<Following> followings = context.Followings.Where(p => p.FollowerId == userId).ToList();
 
                 List<Attendance> attendances = context.Attendances.Where(p => p.AttendeeId == userId).ToList();

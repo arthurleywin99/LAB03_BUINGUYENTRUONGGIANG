@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Lab03_BuiNguyenTruongGiang.Models.Course>
+@{
+    ViewBag.Title = "Mine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Mine</h2>
+
+<ul class="course">
+    @foreach (var item in Model)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @item.DateTime.ToString("MM")
+                </div>
+                <div class="day">
+                    @item.DateTime.ToString("dd")
+                </div>
+            </div>
+            <div class="details">
+                <span class="lecturer">
+                    @item.Lecturer.Name
+                </span>
+                <br />
+                <span class="category">
+                    @item.Category.Name
+                </span>
+            </div>
+            <div class="action">
+                <a href="@Url.Action("Edit", "Courses", new { id = item.Id })">Edit</a>
+                <a href="#">Delete</a>
+            </div>
+            <a href="#" class="js-cancel-course" data-course-id="@item.Id">Cancel</a>
+        </li>
+    }
+</ul>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".js-cancel-course").click(function (e) {
+                e.preventDefault();
+                var link = $(e.target);
+                bootbox.confirm({
+                    title: "Cancel Course?",
+                    message: "Are you sure to cancel?",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fas fa-times"></i>'
+                        },
+                        confirm: {
+                            label: '<i class="fas fa-check"></i>'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/courses/" + link.attr("data-course-id"),
+                                method: "DELETE"
+                            })
+                                .done(function () {
+                                    link.parents("li").fadeOut(function () {
+                                        $(this).remove();
+                                    });
+                                })
+                                .fail(function () {
+                                    alert("Something failed!");
+                                })
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+}

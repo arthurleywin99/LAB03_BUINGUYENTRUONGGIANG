@@ -20,31 +20,37 @@
                 <div class="details">
                     <span class="lecturer">
                         @item.Lecturer.Name
-                        @if (Model.ShowAction)
+                    </span>
+                    @if (@User.Identity.GetUserId() != item.LecturerId)
+                    {
+                        if (Model.ShowAction)
                         {
                             if (!Model.FollowingList.Any(p => p.FolloweeId == item.LecturerId))
                             {
-                                <button class="btn btn-default btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Follow?</button>
+                                <button class="btn btn-default btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Follow</button>
                             }
                             else
                             {
-                                <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Following</button>
+                                <button class="btn btn-info btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Following</button>
                             }
                         }
-                    </span>
+                    }
                     <br />
                     <span class="category">
                         @item.Category.Name
                     </span>
-                    @if (Model.ShowAction)
+                    @if (@User.Identity.GetUserId() != item.LecturerId)
                     {
-                        if (!Model.AttendanceList.Any(p => p.CourseId == item.Id))
+                        if (Model.ShowAction)
                         {
-                            <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
-                        }
-                        else
-                        {
-                            <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Going</button>
+                            if (!Model.AttendanceList.Any(p => p.CourseId == item.Id))
+                            {
+                                <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Go</button>
+                            }
+                            else
+                            {
+                                <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Going</button>
+                            }
                         }
                     }
                 </div>
@@ -59,29 +65,58 @@
         $(document).ready(function () {
             $(".js-toogle-attendance").click(function (e) {
                 var button = $(e.target);
-                $.post('/api/attendances', { courseId: button.attr("data-course-id") })
-                    .done(function () {
-                        button
-                            .removeClass("btn-default")
-                            .addClass("btn-info")
-                            .text("Going");
-                    })
-                    .fail(function () {
-                        alert("Something failed!");
-                    })
+                if (button.text() === "Go") {
+                    $.post('/api/attendances/goingattend', { courseId: button.attr("data-course-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-default")
+                                .addClass("btn-info")
+                                .text("Going");
+                        })
+                        .fail(function () {
+                            alert("Something failed!");
+                        });
+                }
+                else {
+                    $.post('/api/attendances/goattend', { courseId: button.attr("data-course-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-info")
+                                .addClass("btn-default")
+                                .text("Go");
+                        })
+                        .fail(function () {
+                            alert("Something failed!");
+                        });
+                }
             });
+            
             $(".js-toogle-follow").click(function (e) {
                 var button = $(e.target);
-                $.post("/api/followings", { followeeId: button.attr("data-user-id") })
-                    .done(function () {
-                        button
-                            .removeClass("btn-default")
-                            .addClass("btn-info")
-                            .text("Following");
-                    })
-                    .fail(function () {
-                        alert("Something failed!");
-                    })
+                if (button.text() === "Follow") {
+                    $.post("/api/followings/follow", { followeeId: button.attr("data-user-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-default")
+                                .addClass("btn-info")
+                                .text("Following");
+                        })
+                        .fail(function () {
+                            alert("Something failed!");
+                        })
+                }
+                else {
+                    $.post("/api/followings/unfollow", { followeeId: button.attr("data-user-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-info")
+                                .addClass("btn-default")
+                                .text("Follow");
+                        })
+                        .fail(function () {
+                            alert("Something failed!");
+                        })
+                }
             });
         })
     </script>

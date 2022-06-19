@@ -11,9 +11,11 @@ using Microsoft.AspNet.Identity;
 
 namespace Lab03_BuiNguyenTruongGiang.Controllers
 {
+    [RoutePrefix("api/followings")]
     public class FollowingsController : ApiController
     {
         [HttpPost]
+        [Route("follow")]
         public IHttpActionResult Follow(FollowingDto followingDto)
         {
             using (var context = new ApplicationDbContext())
@@ -31,6 +33,27 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                         FolloweeId = followingDto.FolloweeId
                     };
                     context.Followings.Add(following);
+                    context.SaveChanges();
+                    return Ok();
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("unfollow")]
+        public IHttpActionResult Unfollow(FollowingDto followingDto)
+        {                       
+            using (var context = new ApplicationDbContext())
+            {
+                var userId = User.Identity.GetUserId();
+                Following follow = context.Followings.FirstOrDefault(p => p.FollowerId == userId && p.FolloweeId == followingDto.FolloweeId);
+                if (follow == null)
+                {
+                    return BadRequest("This user doesnot exist!");
+                }
+                else
+                {
+                    context.Followings.Remove(follow);
                     context.SaveChanges();
                     return Ok();
                 }
