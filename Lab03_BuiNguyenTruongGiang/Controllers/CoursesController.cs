@@ -23,7 +23,7 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                     Categories = context.Categories.ToList(),
                     Heading = "Add Course"
                 };
-                return View("CourseForm", viewModel);
+                return View("Create", viewModel);
             }
         }
 
@@ -132,7 +132,7 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                     Heading = "Edit Course",
                     Id = course.Id
                 };
-                return View("CourseForm", viewModel);
+                return View("Create", viewModel);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Lab03_BuiNguyenTruongGiang.Controllers
                 course.CategoryId = viewModel.Category;
                 context.SaveChanges();
 
-                return RedirectToAction("CourseForm", "Home");
+                return RedirectToAction("Mine", "Courses");
             }
         }
     }

@@ -19,41 +19,47 @@
                     @item.DateTime.ToString("dd")
                 </div>
             </div>
-            <div class="details">
-                <span class="lecturer">
-                    @item.Lecturer.Name
-                    @if (item.IsCanceled)
-                    {
-                        <span class="label label-warning"></span>
-                    }
-                    @if (Model.ShowAction && !item.IsCanceled)
-                    {
-                        if (!Model.FollowingList.Any(p => p.FolloweeId == item.LecturerId))
+            @if (item.IsCanceled)
+            {
+                <span class="label label-warning">Canceled</span>
+            }
+            else
+            {
+                <div class="details">
+                    <span class="lecturer">
+                        @item.Lecturer.Name
+
+                        @if (Model.ShowAction && !item.IsCanceled)
                         {
-                            <button class="btn btn-default btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Follow?</button>
+                            if (!Model.FollowingList.Any(p => p.FolloweeId == item.LecturerId))
+                            {
+                                <button class="btn btn-default btn-sm js-toogle-follow" data-user-id="@item.LecturerId">Follow?</button>
+                            }
+                            else
+                            {
+                                <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Following</button>
+                            }
+                        }
+
+                    </span>
+                    <br />
+                    <span class="category">
+                        @item.Category.Name
+                    </span>
+                    @if (Model.ShowAction)
+                    {
+                        if (!Model.AttendanceList.Any(p => p.CourseId == item.Id))
+                        {
+                            <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
                         }
                         else
                         {
-                            <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Following</button>
+                            <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Going</button>
                         }
                     }
-                </span>
-                <br />
-                <span class="category">
-                    @item.Category.Name
-                </span>
-                @if (Model.ShowAction)
-                {
-                    if (!Model.AttendanceList.Any(p => p.CourseId == item.Id))
-                    {
-                        <button data-course-id="@item.Id" class="btn btn-default btn-sm js-toogle-attendance">Going?</button>
-                    }
-                    else
-                    {
-                        <button data-course-id="@item.Id" class="btn btn-info btn-sm js-toogle-attendance">Going</button>
-                    }
-                }
-            </div>
+                </div>
+            }
+
         </li>
     }
 </ul>
